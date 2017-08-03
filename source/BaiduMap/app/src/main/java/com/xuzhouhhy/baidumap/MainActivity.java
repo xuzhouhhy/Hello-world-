@@ -5,15 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
-import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.Overlay;
-import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.xuzhouhhy.baidumap.data.Point3DMutable;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
@@ -22,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_LONG;
+import static com.xuzhouhhy.baidumap.util.UtilBaidu.getBitmapDescriptor;
+import static com.xuzhouhhy.baidumap.util.UtilBaidu.getClickBitmapDescriptor;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
             String markInfo = bundle.getString("mark_key");
             Toast.makeText(MainActivity.this, markInfo, LENGTH_LONG).show();
             marker.setIcon(getClickBitmapDescriptor());
+            for (int i = 0; i < mController.getMarks().size(); i++) {
+                if (i != marker.getZIndex()) {
+                    ((Marker) mController.getMarks().get(i)).setIcon(getBitmapDescriptor());
+                }
+            }
 //            marker.remove();
 //            OverlayOptions option = new MarkerOptions()
 //                    .position(marker.getPosition())
@@ -77,10 +79,6 @@ public class MainActivity extends AppCompatActivity {
         points.add(new Point3DMutable(30.9, 120.9, 0));
         points.add(new Point3DMutable(30.8, 120.8, 0));
         return points;
-    }
-
-    private BitmapDescriptor getClickBitmapDescriptor() {
-        return BitmapDescriptorFactory.fromResource(R.drawable.plus);
     }
 
     @Override
