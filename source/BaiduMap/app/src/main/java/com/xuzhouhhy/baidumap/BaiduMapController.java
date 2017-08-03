@@ -34,7 +34,7 @@ class BaiduMapController {
     }
 
     private void initOverlay() {
-        for (int i = 0; i<mPoints.size(); i++) {
+        for (int i = 0; i < mPoints.size(); i++) {
             //定义Maker坐标点
             LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mPoints.get(i));
             //构建Marker图标
@@ -48,7 +48,7 @@ class BaiduMapController {
             Overlay marker = mBaiduMap.addOverlay(option);
             marker.setZIndex(i);
             Bundle bundle = new Bundle();
-            bundle.putString("mark_key", "31&121");
+            bundle.putString("mark_key", "marker index : " + marker.getZIndex());
             marker.setExtraInfo(bundle);
         }
     }
