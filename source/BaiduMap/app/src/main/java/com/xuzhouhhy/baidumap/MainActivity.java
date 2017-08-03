@@ -2,6 +2,8 @@ package com.xuzhouhhy.baidumap;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
@@ -9,7 +11,6 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
-import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.xuzhouhhy.baidumap.data.Point3DMutable;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
@@ -26,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private BaiduMapController mController;
 
     private MapView mMapView;
+
+    private ImageButton mIbtnPackage;
+    private ImageButton mIbtnNavigate;
+    private ImageButton mIbtnDelete;
 
     private BaiduMap.OnMarkerClickListener mOnMarkerClickListener = new BaiduMap.OnMarkerClickListener() {
         @Override
@@ -53,6 +58,25 @@ public class MainActivity extends AppCompatActivity {
 //            newbundle.putString("mark_key", "31&121");
 //            newmarker.setExtraInfo(newbundle);
             return false;
+        }
+    };
+
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btnPackagee:
+                    onShowPackage();
+                    break;
+                case R.id.btnNavigate:
+                    onNavigate();
+                    break;
+                case R.id.btnDelete:
+                    onDelete();
+                    break;
+                default:
+                    break;
+            }
         }
     };
 
@@ -84,6 +108,17 @@ public class MainActivity extends AppCompatActivity {
         points.add(new Point3DMutable(30.8, 120.8, 0));
         points.add(new Point3DMutable(33, 120.8, 0));
         return points;
+    }
+    
+    private void onDelete() {
+    }
+
+    private void onNavigate() {
+
+    }
+
+    private void onShowPackage() {
+
     }
 
     @Override
