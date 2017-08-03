@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         LatLng latLng = UtilBaidu.coorConverter84ToBaidu(new LatLng(31, 121));
         MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(latLng);
         mController.getBaiduMap().animateMapStatus(update);
+        //隐藏缩放按钮
+        mMapView.showZoomControls(false);
     }
 
     private List<Point3DMutable> getPoints() {
