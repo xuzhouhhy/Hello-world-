@@ -11,9 +11,16 @@ import com.baidu.mapapi.SDKInitializer;
 
 public class App extends Application {
 
+    private static App instance = null;
+
+    public static App getInstance() {
+        return instance;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         SDKInitializer.initialize(this);
     }
 

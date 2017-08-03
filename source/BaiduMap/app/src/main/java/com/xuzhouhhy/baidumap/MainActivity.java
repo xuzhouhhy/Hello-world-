@@ -9,6 +9,7 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.xuzhouhhy.baidumap.data.Point3DMutable;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initview() {
+//        TextOptions
         mMapView = (MapView) findViewById(R.id.bmapView);
         mController = new BaiduMapController(mMapView.getMap(), getPoints());
         mController.setOnMarkerClickListener(mOnMarkerClickListener);
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         points.add(new Point3DMutable(31.2, 121.2, 0));
         points.add(new Point3DMutable(30.9, 120.9, 0));
         points.add(new Point3DMutable(30.8, 120.8, 0));
+        points.add(new Point3DMutable(33, 120.8, 0));
         return points;
     }
 
