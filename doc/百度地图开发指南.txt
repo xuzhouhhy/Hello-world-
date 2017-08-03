@@ -1,0 +1,103 @@
+------------------------------------------------------------------------------------------------------------
+
+标注覆盖物
+
+在百度地图上展示覆盖物，需使用百度BD09坐标，如使用其他坐标（ WGS84、GCJ02）进行展示，需先将其他坐标转换为BD09，详细说明请参考坐标转换页面，请勿使用非官方的转换方法
+地图标注
+开发者可根据自己实际的业务需求，利用标注覆盖物，在地图指定的位置上添加标注信息。
+具体实现方法如下：
+//定义Maker坐标点  
+LatLng point = new LatLng(39.963175, 116.400244);  
+//构建Marker图标  
+BitmapDescriptor bitmap = BitmapDescriptorFactory  
+    .fromResource(R.drawable.icon_marka);  
+//构建MarkerOption，用于在地图上添加Marker  
+OverlayOptions option = new MarkerOptions()  
+    .position(point)  
+    .icon(bitmap);  
+//在地图上添加Marker，并显示  
+marker = mBaiduMap.addOverlay(option);
+
+            //使用marker携带info信息，当点击事件的时候可以通过marker获得info信息
+            Bundle bundle = new Bundle();
+            //info必须实现序列化接口
+            bundle.putSerializable("info", info);
+            marker.setExtraInfo(bundle);
+
+//对 marker 添加点击相应事件  
+baiduMap.setOnMarkerClickListener(new OnMarkerClickListener() {  
+      
+    @Override  
+    public boolean onMarkerClick(Marker arg0) {  
+        // TODO Auto-generated method stub  
+        Toast.makeText(getApplicationContext(), "Marker被点击了！", Toast.LENGTH_SHORT).show();  
+        return false;  
+    }  
+});  
+------------------------------------------------------------------------------------------------------------
+
+标注覆盖物拖拽
+
+针对已经添加在地图上的标注，可采用如下方式进行手势拖拽：
+第一步，设置可拖拽：
+OverlayOptions options = new MarkerOptions()
+    .position(llA)  //设置marker的位置
+    .icon(bdA)  //设置marker图标
+    .zIndex(9)  //设置marker所在层级
+    .draggable(true);  //设置手势拖拽
+//将marker添加到地图上
+marker = (Marker) (mBaiduMap.addOverlay(options));
+第二步，设置监听方法：
+//调用BaiduMap对象的setOnMarkerDragListener方法设置marker拖拽的监听
+mBaiduMap.setOnMarkerDragListener(new OnMarkerDragListener() {
+    public void onMarkerDrag(Marker marker) {
+        //拖拽中
+    }
+    public void onMarkerDragEnd(Marker marker) {
+        //拖拽结束
+    }
+    public void onMarkerDragStart(Marker marker) {
+        //开始拖拽
+    }
+});
+
+------------------------------------------------------------------------------------------------------------
+
+文字覆盖物
+
+文字，在地图中也是一种覆盖物，开发者可利用相关的接口，快速实现在地图上书写文字的需求。实现方式如下：
+//定义文字所显示的坐标点  
+LatLng llText = new LatLng(39.86923, 116.397428);  
+//构建文字Option对象，用于在地图上添加文字  
+OverlayOptions textOption = new TextOptions()  
+    .bgColor(0xAAFFFF00)  
+    .fontSize(24)  
+    .fontColor(0xFFFF00FF)  
+    .text("百度地图SDK")  
+    .rotate(-30)  
+    .position(llText);  
+//在地图上添加该文字对象并显示  
+mBaiduMap.addOverlay(textOption);
+
+------------------------------------------------------------------------------------------------------------
+
+弹出窗覆盖物
+
+弹出窗覆盖物的实现方式如下，开发者可利用此接口，构建具有更强交互性的地图页面。
+//创建InfoWindow展示的view  
+Button button = new Button(getApplicationContext());  
+button.setBackgroundResource(R.drawable.popup);  
+//定义用于显示该InfoWindow的坐标点  
+LatLng pt = new LatLng(39.86923, 116.397428);  
+//创建InfoWindow , 传入 view， 地理坐标， y 轴偏移量 
+InfoWindow mInfoWindow = new InfoWindow(button, pt, -47);  
+//显示InfoWindow  
+mBaiduMap.showInfoWindow(mInfoWindow);
+
+------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------
+
+
