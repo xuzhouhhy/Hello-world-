@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(MainActivity.this, "取消", LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "点击取消", LENGTH_LONG).show();
                     dismissInputDialog();
                 }
             };

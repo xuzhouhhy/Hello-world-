@@ -39,6 +39,7 @@
         android:layout_alignBottom="@+id/btnDelete"
         android:layout_alignEnd="@+id/btnDelete"
         android:layout_marginBottom="80dp"
+        android:background="@color/navbac"
         android:src="@drawable/pos_caution"/>
 
     <ImageButton
@@ -48,6 +49,7 @@
         android:layout_alignBottom="@+id/btnNavigate"
         android:layout_alignEnd="@+id/btnNavigate"
         android:layout_marginBottom="80dp"
+        android:background="@color/navinput"
         android:src="@drawable/pos_caution"/>
 
     <ImageButton
@@ -57,6 +59,7 @@
         android:layout_alignBottom="@+id/btnInput"
         android:layout_alignEnd="@+id/btnInput"
         android:layout_marginBottom="80dp"
+        android:background="@color/navpac"
         android:src="@drawable/pos_caution"/>
 
 </RelativeLayout>
