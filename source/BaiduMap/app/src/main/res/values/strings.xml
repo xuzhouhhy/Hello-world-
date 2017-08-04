@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BaiduMap</string>
+    <string name="neh">本地NEH</string>
+    <string name="blh">WGS BLH</string>
+    <string-array name="navigation_point_type">
+        <item>@string/neh</item>
+        <item>@string/blh</item>
+    </string-array>
 </resources>

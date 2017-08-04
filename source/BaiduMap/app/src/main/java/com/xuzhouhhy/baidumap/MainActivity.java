@@ -1,9 +1,13 @@
 package com.xuzhouhhy.baidumap;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -32,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private MapView mMapView;
 
+    private Dialog mDialog;
+
     private BaiduMap.OnMarkerClickListener mOnMarkerClickListener = new BaiduMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
@@ -59,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private View.OnClickListener mOnViewClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -84,6 +90,30 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private DialogInterface.OnClickListener mPositiveClickListener =
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(MainActivity.this, "点击确定", LENGTH_LONG).show();
+                }
+            };
+
+    private DialogInterface.OnClickListener mNegativeClickListener =
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(MainActivity.this, "取消", LENGTH_LONG).show();
+                    dismissInputDialog();
+                }
+            };
+
+    private void dismissInputDialog() {
+        if (mDialog != null) {
+            mDialog.cancel();
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
         ImageButton ibtnInput = (ImageButton) findViewById(R.id.btnInput);
         ImageButton ibtnStartBaidu = (ImageButton) findViewById(R.id.btnBaiduMap);
         //set listener
-        ibtnPackage.setOnClickListener(mOnClickListener);
-        ibtnNavigate.setOnClickListener(mOnClickListener);
-        ibtnDelete.setOnClickListener(mOnClickListener);
-        ibtnInput.setOnClickListener(mOnClickListener);
-        ibtnStartBaidu.setOnClickListener(mOnClickListener);
+        ibtnPackage.setOnClickListener(mOnViewClickListener);
+        ibtnNavigate.setOnClickListener(mOnViewClickListener);
+        ibtnDelete.setOnClickListener(mOnViewClickListener);
+        ibtnInput.setOnClickListener(mOnViewClickListener);
+        ibtnStartBaidu.setOnClickListener(mOnViewClickListener);
         mController.setOnMarkerClickListener(mOnMarkerClickListener);
         //map center
         LatLng latLng = UtilBaidu.coorConverter84ToBaidu(new LatLng(31, 121));
@@ -150,7 +180,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onInput() {
-
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.dialog_input_navigation_point, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setView(view)
+                .setMessage("目的地坐标")
+                .setPositiveButton("确定", mPositiveClickListener)
+                .setNegativeButton("取消", mNegativeClickListener)
+                .setCancelable(false);
+        mDialog = builder.create();
+        mDialog.show();
     }
 
     @Override
