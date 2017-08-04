@@ -31,25 +31,17 @@ class BaiduMapController {
 
     private List<Point3DMutable> mPoints;
 
-    private List<Overlay> mMarks;
-
-    private List<Overlay> mTitleMarks;
-
     BaiduMapController(@NonNull BaiduMap baiduMap, @NonNull List<Point3DMutable> points) {
         mBaiduMap = baiduMap;
         mBaiduBlockMarks = new ArrayList<>();
         mPoints = points;
-        mMarks = new ArrayList<>();
-        mTitleMarks = new ArrayList<>();
         initPointMarker();
     }
 
     private void initPointMarker() {
         for (int i = 0; i < mPoints.size(); i++) {
             Overlay pointMarker = getPointOverlay(i);
-            mMarks.add(pointMarker);
             Overlay titleMarker = getTitleOverlay(i);
-            mTitleMarks.add(titleMarker);
             mBaiduBlockMarks.add(new BaiduBlockMark(mPoints.get(i), pointMarker, titleMarker));
         }
     }
@@ -92,20 +84,8 @@ class BaiduMapController {
         return mBaiduMap;
     }
 
-    public void setBaiduMap(BaiduMap baiduMap) {
-        mBaiduMap = baiduMap;
-    }
-
-    public List<Overlay> getMarks() {
-        return mMarks;
-    }
-
-    public List<Point3DMutable> getPoints() {
-        return mPoints;
-    }
-
-    public void setPoints(List<Point3DMutable> points) {
-        mPoints = points;
+    public List<BaiduBlockMark> getBaiduBlockMarks() {
+        return mBaiduBlockMarks;
     }
 
     void setOnMarkerClickListener(BaiduMap.OnMarkerClickListener onMarkerClickListener) {

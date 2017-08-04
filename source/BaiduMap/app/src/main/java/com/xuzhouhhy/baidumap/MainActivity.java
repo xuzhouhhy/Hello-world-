@@ -39,9 +39,10 @@ public class MainActivity extends AppCompatActivity {
             String markInfo = bundle.getString("mark_key");
             Toast.makeText(MainActivity.this, markInfo, LENGTH_LONG).show();
             marker.setIcon(getClickBitmapDescriptor());
-            for (int i = 0; i < mController.getMarks().size(); i++) {
+            for (int i = 0; i < mController.getBaiduBlockMarks().size(); i++) {
                 if (i != marker.getZIndex()) {
-                    ((Marker) mController.getMarks().get(i)).setIcon(getBitmapDescriptor());
+                    ((Marker) mController.getBaiduBlockMarks().get(i).getPointMark())
+                            .setIcon(getBitmapDescriptor());
                 }
             }
 //            marker.remove();
