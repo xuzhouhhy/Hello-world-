@@ -9,7 +9,7 @@ import com.baidu.mapapi.map.Overlay;
 
 public class BaiduBlockMark {
 
-    private Point3DMutable mPoint;
+    private Block mBlock;
 
     /**
      * 点标记
@@ -21,33 +21,22 @@ public class BaiduBlockMark {
      */
     private Overlay mTitleMark;
 
-    public BaiduBlockMark(Point3DMutable point, Overlay pointMark, Overlay titleMark) {
-        mPoint = point;
+    public BaiduBlockMark(Block block, Overlay pointMark, Overlay titleMark) {
+        mBlock = block;
         mPointMark = pointMark;
         mTitleMark = titleMark;
     }
 
-    public Point3DMutable getPoint() {
-        return mPoint;
-    }
-
-    public void setPoint(Point3DMutable point) {
-        mPoint = point;
+    public Block getBlock() {
+        return mBlock;
     }
 
     public Overlay getPointMark() {
         return mPointMark;
     }
 
-    public void setPointMark(Overlay pointMark) {
-        mPointMark = pointMark;
-    }
-
     public Overlay getTitleMark() {
         return mTitleMark;
     }
 
-    public void setTitleMark(Overlay titleMark) {
-        mTitleMark = titleMark;
-    }
 }

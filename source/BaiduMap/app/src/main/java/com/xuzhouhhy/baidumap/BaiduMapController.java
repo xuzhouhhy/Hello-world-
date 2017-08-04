@@ -2,6 +2,7 @@ package com.xuzhouhhy.baidumap;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -10,12 +11,15 @@ import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.xuzhouhhy.baidumap.app.App;
 import com.xuzhouhhy.baidumap.data.BaiduBlockMark;
-import com.xuzhouhhy.baidumap.data.Point3DMutable;
+import com.xuzhouhhy.baidumap.data.Block;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 /**
  * Created by user on 2017/8/3.
@@ -25,29 +29,29 @@ class BaiduMapController {
 
     private BaiduMap mBaiduMap;
 
-    private int mIndex = -1;
+    private String mBlockNumber = "";
 
     private List<BaiduBlockMark> mBaiduBlockMarks;
 
-    private List<Point3DMutable> mPoints;
+    private List<Block> mBlocks;
 
-    BaiduMapController(@NonNull BaiduMap baiduMap, @NonNull List<Point3DMutable> points) {
+    BaiduMapController(@NonNull BaiduMap baiduMap, @NonNull List<Block> blocks) {
         mBaiduMap = baiduMap;
         mBaiduBlockMarks = new ArrayList<>();
-        mPoints = points;
+        mBlocks = blocks;
         initPointMarker();
     }
 
     private void initPointMarker() {
-        for (int i = 0; i < mPoints.size(); i++) {
+        for (int i = 0; i < mBlocks.size(); i++) {
             Overlay pointMarker = getPointOverlay(i);
             Overlay titleMarker = getTitleOverlay(i);
-            mBaiduBlockMarks.add(new BaiduBlockMark(mPoints.get(i), pointMarker, titleMarker));
+            mBaiduBlockMarks.add(new BaiduBlockMark(mBlocks.get(i), pointMarker, titleMarker));
         }
     }
 
     private Overlay getTitleOverlay(int i) {
-        LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mPoints.get(i));
+        LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mBlocks.get(i).getPoint());
         TextOptions textOptions = new TextOptions()
                 .text("index : " + new Integer(i).toString())
                 .align(TextOptions.ALIGN_CENTER_VERTICAL, TextOptions.ALIGN_TOP)
@@ -63,7 +67,7 @@ class BaiduMapController {
     @NonNull
     private Overlay getPointOverlay(int i) {
         //定义Maker坐标点
-        LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mPoints.get(i));
+        LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mBlocks.get(i).getPoint());
         //构建Marker图标
         BitmapDescriptor bitmap = UtilBaidu.getBitmapDescriptor();
         //构建MarkerOption，用于在地图上添加Marker
@@ -75,7 +79,7 @@ class BaiduMapController {
         Overlay marker = mBaiduMap.addOverlay(option);
         marker.setZIndex(i);
         Bundle bundle = new Bundle();
-        bundle.putString("mark_key", "marker index : " + marker.getZIndex());
+        bundle.putString("mark_key", mBlocks.get(i).getBlockNumber());
         marker.setExtraInfo(bundle);
         return marker;
     }
@@ -92,11 +96,25 @@ class BaiduMapController {
         mBaiduMap.setOnMarkerClickListener(onMarkerClickListener);
     }
 
-    public void setIndex(int index) {
-        mIndex = index;
+    public void setBlockNumber(String blockNumber) {
+        mBlockNumber = blockNumber;
     }
 
-    public int getIndex() {
-        return mIndex;
+    /**
+     * delete select block mark
+     */
+    public void deleteSelect() {
+        if (mBlockNumber == null || mBlockNumber.isEmpty()) {
+            Toast.makeText(App.getInstance(), "请选择删除点", LENGTH_LONG);
+            return;
+        }
+        for (BaiduBlockMark blockMark : mBaiduBlockMarks) {
+            if (blockMark.getBlock().getBlockNumber().equalsIgnoreCase(mBlockNumber)) {
+                blockMark.getPointMark().remove();
+                blockMark.getTitleMark().remove();
+                mBaiduBlockMarks.remove(blockMark);
+                return;
+            }
+        }
     }
 }

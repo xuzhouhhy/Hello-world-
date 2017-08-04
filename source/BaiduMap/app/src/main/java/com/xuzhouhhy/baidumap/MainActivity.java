@@ -13,6 +13,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.Text;
 import com.baidu.mapapi.model.LatLng;
+import com.xuzhouhhy.baidumap.data.Block;
 import com.xuzhouhhy.baidumap.data.Point3DMutable;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
 
@@ -37,33 +38,25 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onMarkerClick(Marker marker) {
             Bundle bundle = marker.getExtraInfo();
-            String markInfo = bundle.getString("mark_key");
-            Toast.makeText(MainActivity.this, markInfo, LENGTH_LONG).show();
+            String clickBlockNum = bundle.getString("mark_key");
+            if (clickBlockNum == null || clickBlockNum.isEmpty()) {
+                return false;
+            }
+            mController.setBlockNumber(clickBlockNum);
+            Toast.makeText(MainActivity.this, clickBlockNum, LENGTH_LONG).show();
             marker.setIcon(getClickBitmapDescriptor());
             for (int i = 0; i < mController.getBaiduBlockMarks().size(); i++) {
-                if (i != marker.getZIndex()) {
+                String num = mController.getBaiduBlockMarks().get(i).getBlock().getBlockNumber();
+                if (clickBlockNum.equalsIgnoreCase(num)) {
+                    ((Text) mController.getBaiduBlockMarks().get(i).getTitleMark()).setBgColor(
+                            getResources().getColor(R.color.colorPrimaryDark));
+                } else {
                     ((Marker) mController.getBaiduBlockMarks().get(i).getPointMark())
                             .setIcon(getBitmapDescriptor());
                     ((Text) mController.getBaiduBlockMarks().get(i).getTitleMark()).setBgColor(
                             getResources().getColor(R.color.navinput));
-                } else {
-                    ((Text) mController.getBaiduBlockMarks().get(i).getTitleMark()).setBgColor(
-                            getResources().getColor(R.color.colorPrimaryDark));
                 }
             }
-//            marker.remove();
-//            OverlayOptions option = new MarkerOptions()
-//                    .position(marker.getPosition())
-//                    .icon(getClickBitmapDescriptor())
-//                    .title("s_12345_01");
-//            //在地图上添加Marker，并显示
-//            Overlay newmarker = mBaiduMap.addOverlay(option);
-//            Bundle newbundle = new Bundle();
-//            newbundle.putString("mark_key", "31&121");
-//            newmarker.setExtraInfo(newbundle);
-//            Bundle newbundle = new Bundle();
-//            newbundle.putString("mark_key", "31&121");
-//            newmarker.setExtraInfo(newbundle);
             return false;
         }
     };
@@ -96,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initview() {
         mMapView = (MapView) findViewById(R.id.bmapView);
-        mController = new BaiduMapController(mMapView.getMap(), getPoints());
+        mController = new BaiduMapController(mMapView.getMap(), getBlocks());
         mIbtnPackage = (ImageButton) findViewById(R.id.btnPackage);
         mIbtnNavigate = (ImageButton) findViewById(R.id.btnNavigate);
         mIbtnDelete = (ImageButton) findViewById(R.id.btnDelete);
@@ -111,18 +104,19 @@ public class MainActivity extends AppCompatActivity {
         mMapView.showZoomControls(false);
     }
 
-    private List<Point3DMutable> getPoints() {
-        List<Point3DMutable> points = new ArrayList<>();
-        points.add(new Point3DMutable(31, 121, 0));
-        points.add(new Point3DMutable(31.1, 121.1, 0));
-        points.add(new Point3DMutable(31.2, 121.2, 0));
-        points.add(new Point3DMutable(30.9, 120.9, 0));
-        points.add(new Point3DMutable(30.8, 120.8, 0));
-        points.add(new Point3DMutable(33, 120.8, 0));
-        return points;
+    private List<Block> getBlocks() {
+        List<Block> blocks = new ArrayList<>();
+        blocks.add(new Block(new Point3DMutable(31, 121, 0), "S_0123456_01"));
+        blocks.add(new Block(new Point3DMutable(31.1, 121.1, 0), "S_0123456_02"));
+        blocks.add(new Block(new Point3DMutable(31.2, 121.2, 0), "S_0123456_03"));
+        blocks.add(new Block(new Point3DMutable(30.9, 120.9, 0), "S_0123456_04"));
+        blocks.add(new Block(new Point3DMutable(30.8, 120.8, 0), "S_0123456_05"));
+        blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "S_0123456_06"));
+        return blocks;
     }
 
     private void onDelete() {
+        mController.deleteSelect();
     }
 
     private void onNavigate() {
