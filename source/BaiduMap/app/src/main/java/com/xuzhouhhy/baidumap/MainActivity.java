@@ -32,12 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MapView mMapView;
 
-    private ImageButton mIbtnPackage;
-    private ImageButton mIbtnNavigate;
-    private ImageButton mIbtnDelete;
-    private ImageButton mIbtnInput;
-    private ImageButton mIbtnStartBaidu;
-
     private BaiduMap.OnMarkerClickListener mOnMarkerClickListener = new BaiduMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
@@ -98,19 +92,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initview() {
+        //set value
         mMapView = (MapView) findViewById(R.id.bmapView);
         mController = new BaiduMapController(mMapView.getMap(), getBlocks());
-        mIbtnPackage = (ImageButton) findViewById(R.id.btnPackage);
-        mIbtnNavigate = (ImageButton) findViewById(R.id.btnNavigate);
-        mIbtnDelete = (ImageButton) findViewById(R.id.btnDelete);
-        mIbtnInput = (ImageButton) findViewById(R.id.btnInput);
-        mIbtnStartBaidu = (ImageButton) findViewById(R.id.btnBaiduMap);
-        mIbtnPackage.setOnClickListener(mOnClickListener);
-        mIbtnNavigate.setOnClickListener(mOnClickListener);
-        mIbtnDelete.setOnClickListener(mOnClickListener);
-        mIbtnInput.setOnClickListener(mOnClickListener);
-        mIbtnStartBaidu.setOnClickListener(mOnClickListener);
+        ImageButton ibtnPackage = (ImageButton) findViewById(R.id.btnPackage);
+        ImageButton ibtnNavigate = (ImageButton) findViewById(R.id.btnNavigate);
+        ImageButton ibtnDelete = (ImageButton) findViewById(R.id.btnDelete);
+        ImageButton ibtnInput = (ImageButton) findViewById(R.id.btnInput);
+        ImageButton ibtnStartBaidu = (ImageButton) findViewById(R.id.btnBaiduMap);
+        //set listener
+        ibtnPackage.setOnClickListener(mOnClickListener);
+        ibtnNavigate.setOnClickListener(mOnClickListener);
+        ibtnDelete.setOnClickListener(mOnClickListener);
+        ibtnInput.setOnClickListener(mOnClickListener);
+        ibtnStartBaidu.setOnClickListener(mOnClickListener);
         mController.setOnMarkerClickListener(mOnMarkerClickListener);
+        //map center
         LatLng latLng = UtilBaidu.coorConverter84ToBaidu(new LatLng(31, 121));
         MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(latLng);
         mController.getBaiduMap().animateMapStatus(update);
