@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mIbtnPackage;
     private ImageButton mIbtnNavigate;
     private ImageButton mIbtnDelete;
+    private ImageButton mIbtnInput;
+    private ImageButton mIbtnStartBaidu;
 
     private BaiduMap.OnMarkerClickListener mOnMarkerClickListener = new BaiduMap.OnMarkerClickListener() {
         @Override
@@ -76,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btnDelete:
                     onDelete();
                     break;
+                case R.id.btnInput:
+                    onInput();
+                    break;
+                case R.id.btnBaiduMap:
+                    onStartBaidu();
+                    break;
                 default:
                     break;
             }
@@ -95,9 +103,13 @@ public class MainActivity extends AppCompatActivity {
         mIbtnPackage = (ImageButton) findViewById(R.id.btnPackage);
         mIbtnNavigate = (ImageButton) findViewById(R.id.btnNavigate);
         mIbtnDelete = (ImageButton) findViewById(R.id.btnDelete);
+        mIbtnInput = (ImageButton) findViewById(R.id.btnInput);
+        mIbtnStartBaidu = (ImageButton) findViewById(R.id.btnBaiduMap);
         mIbtnPackage.setOnClickListener(mOnClickListener);
         mIbtnNavigate.setOnClickListener(mOnClickListener);
         mIbtnDelete.setOnClickListener(mOnClickListener);
+        mIbtnInput.setOnClickListener(mOnClickListener);
+        mIbtnStartBaidu.setOnClickListener(mOnClickListener);
         mController.setOnMarkerClickListener(mOnMarkerClickListener);
         LatLng latLng = UtilBaidu.coorConverter84ToBaidu(new LatLng(31, 121));
         MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(latLng);
@@ -122,14 +134,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onNavigate() {
-        Intent i1 = new Intent();
 
-        i1.setData(Uri.parse("baidumap://map/newsassistant"));
-
-        startActivity(i1);
     }
 
     private void onShowPackage() {
+
+    }
+
+    private void onStartBaidu() {
+        // TODO: 2017/8/4 show confirm dialog
+        Intent i1 = new Intent();
+        i1.setData(Uri.parse("baidumap://map?"));
+        startActivity(i1);
+    }
+
+    private void onInput() {
 
     }
 
