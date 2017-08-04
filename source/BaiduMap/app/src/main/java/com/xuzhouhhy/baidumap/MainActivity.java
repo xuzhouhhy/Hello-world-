@@ -11,6 +11,7 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.Text;
 import com.baidu.mapapi.model.LatLng;
 import com.xuzhouhhy.baidumap.data.Point3DMutable;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
@@ -43,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
                 if (i != marker.getZIndex()) {
                     ((Marker) mController.getBaiduBlockMarks().get(i).getPointMark())
                             .setIcon(getBitmapDescriptor());
+                    ((Text) mController.getBaiduBlockMarks().get(i).getTitleMark()).setBgColor(
+                            getResources().getColor(R.color.navinput));
+                } else {
+                    ((Text) mController.getBaiduBlockMarks().get(i).getTitleMark()).setBgColor(
+                            getResources().getColor(R.color.colorPrimaryDark));
                 }
             }
 //            marker.remove();
@@ -66,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.btnPackagee:
+                case R.id.btnPackage:
                     onShowPackage();
                     break;
                 case R.id.btnNavigate:
@@ -91,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private void initview() {
         mMapView = (MapView) findViewById(R.id.bmapView);
         mController = new BaiduMapController(mMapView.getMap(), getPoints());
-        mIbtnPackage = (ImageButton) findViewById(R.id.btnPackagee);
+        mIbtnPackage = (ImageButton) findViewById(R.id.btnPackage);
         mIbtnNavigate = (ImageButton) findViewById(R.id.btnNavigate);
         mIbtnDelete = (ImageButton) findViewById(R.id.btnDelete);
         mIbtnPackage.setOnClickListener(mOnClickListener);
