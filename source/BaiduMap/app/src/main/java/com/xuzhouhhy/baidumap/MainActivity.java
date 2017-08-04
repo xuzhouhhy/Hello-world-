@@ -88,9 +88,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initview() {
-//        TextOptions
         mMapView = (MapView) findViewById(R.id.bmapView);
         mController = new BaiduMapController(mMapView.getMap(), getPoints());
+        mIbtnPackage = (ImageButton) findViewById(R.id.btnPackagee);
+        mIbtnNavigate = (ImageButton) findViewById(R.id.btnNavigate);
+        mIbtnDelete = (ImageButton) findViewById(R.id.btnDelete);
+        mIbtnPackage.setOnClickListener(mOnClickListener);
+        mIbtnNavigate.setOnClickListener(mOnClickListener);
+        mIbtnDelete.setOnClickListener(mOnClickListener);
         mController.setOnMarkerClickListener(mOnMarkerClickListener);
         LatLng latLng = UtilBaidu.coorConverter84ToBaidu(new LatLng(31, 121));
         MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(latLng);
@@ -109,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         points.add(new Point3DMutable(33, 120.8, 0));
         return points;
     }
-    
+
     private void onDelete() {
     }
 

@@ -5,12 +5,12 @@ import android.support.annotation.NonNull;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.xuzhouhhy.baidumap.data.BaiduBlockMark;
 import com.xuzhouhhy.baidumap.data.Point3DMutable;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
 
@@ -25,6 +25,10 @@ class BaiduMapController {
 
     private BaiduMap mBaiduMap;
 
+    private int mIndex = -1;
+
+    private List<BaiduBlockMark> mBaiduBlockMarks;
+
     private List<Point3DMutable> mPoints;
 
     private List<Overlay> mMarks;
@@ -33,47 +37,39 @@ class BaiduMapController {
 
     BaiduMapController(@NonNull BaiduMap baiduMap, @NonNull List<Point3DMutable> points) {
         mBaiduMap = baiduMap;
+        mBaiduBlockMarks = new ArrayList<>();
         mPoints = points;
         mMarks = new ArrayList<>();
         mTitleMarks = new ArrayList<>();
         initPointMarker();
-        initTitle();
-    }
-
-    private void initTitle() {
-        for (int i = 0; i < mPoints.size(); i++) {
-            LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mPoints.get(i));
-            TextOptions textOptions = new TextOptions()
-                    .text("index : " + new Integer(i).toString())
-                    .align(TextOptions.ALIGN_CENTER_VERTICAL, TextOptions.ALIGN_TOP)
-                    .fontSize(20)
-                    .bgColor(android.support.v7.appcompat.R.color.abc_hint_foreground_material_dark)
-                    .fontColor(android.support.v7.appcompat.R.color.abc_btn_colored_borderless_text_material)
-                    .position(latLng)
-                    .zIndex(i)
-                    .rotate(0);
-            Overlay titleMarker = mBaiduMap.addOverlay(textOptions);
-            mTitleMarks.add(titleMarker);
-//            //创建InfoWindow展示的view
-//            Button button = new Button(App.getInstance());
-//            button.setBackgroundResource(R.drawable.pos_caution);
-////            TextView tvTitle = new TextView(App.getInstance());
-////            tvTitle.setText("index : " + new Integer(i).toString());
-//            //创建InfoWindow , 传入 view， 地理坐标， y 轴偏移量
-//            InfoWindow infoWindow = new InfoWindow(button, latLng, -47);
-//            mWindows.add(infoWindow);
-        }
     }
 
     private void initPointMarker() {
         for (int i = 0; i < mPoints.size(); i++) {
-            Overlay marker = getOverlay(i);
-            mMarks.add(marker);
+            Overlay pointMarker = getPointOverlay(i);
+            mMarks.add(pointMarker);
+            Overlay titleMarker = getTitleOverlay(i);
+            mTitleMarks.add(titleMarker);
+            mBaiduBlockMarks.add(new BaiduBlockMark(mPoints.get(i), pointMarker, titleMarker));
         }
     }
 
+    private Overlay getTitleOverlay(int i) {
+        LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mPoints.get(i));
+        TextOptions textOptions = new TextOptions()
+                .text("index : " + new Integer(i).toString())
+                .align(TextOptions.ALIGN_CENTER_VERTICAL, TextOptions.ALIGN_TOP)
+                .fontSize(30)
+                .bgColor(android.support.v7.appcompat.R.color.abc_hint_foreground_material_dark)
+                .fontColor(android.support.v7.appcompat.R.color.abc_btn_colored_borderless_text_material)
+                .position(latLng)
+                .zIndex(i)
+                .rotate(0);
+        return mBaiduMap.addOverlay(textOptions);
+    }
+
     @NonNull
-    private Overlay getOverlay(int i) {
+    private Overlay getPointOverlay(int i) {
         //定义Maker坐标点
         LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mPoints.get(i));
         //构建Marker图标
@@ -114,5 +110,13 @@ class BaiduMapController {
 
     void setOnMarkerClickListener(BaiduMap.OnMarkerClickListener onMarkerClickListener) {
         mBaiduMap.setOnMarkerClickListener(onMarkerClickListener);
+    }
+
+    public void setIndex(int index) {
+        mIndex = index;
+    }
+
+    public int getIndex() {
+        return mIndex;
     }
 }
