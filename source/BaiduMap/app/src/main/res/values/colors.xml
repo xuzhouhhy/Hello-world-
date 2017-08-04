@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="navbac">#1db67b</color>
-    <color name="navpac">#c92a0a</color>
+    <color name="navpac">#d333dc</color>
     <color name="navinput">#618355</color>
+    <color name="navBaidu">#c7590f</color>
 </resources>

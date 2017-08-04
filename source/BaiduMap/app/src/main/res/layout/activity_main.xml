@@ -12,13 +12,23 @@
         android:clickable="true"/>
 
     <ImageButton
-        android:id="@+id/btnDelete"
+        android:id="@+id/btnBaiduMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/bmapView"
         android:layout_alignEnd="@+id/bmapView"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
+        android:background="@color/navBaidu"
+        android:src="@drawable/pos_caution"/>
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnBaiduMap"
+        android:layout_alignEnd="@+id/btnBaiduMap"
+        android:layout_marginBottom="80dp"
         android:background="@color/colorPrimary"
         android:src="@drawable/pos_caution"/>
 

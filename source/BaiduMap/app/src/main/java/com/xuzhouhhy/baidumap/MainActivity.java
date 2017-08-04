@@ -1,5 +1,7 @@
 package com.xuzhouhhy.baidumap;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -120,7 +122,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onNavigate() {
+        Intent i1 = new Intent();
 
+        i1.setData(Uri.parse("baidumap://map/newsassistant"));
+
+        startActivity(i1);
     }
 
     private void onShowPackage() {
