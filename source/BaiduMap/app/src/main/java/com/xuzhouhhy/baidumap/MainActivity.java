@@ -134,7 +134,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onNavigate() {
-
+        //打开百度地图导航intent
+        Intent intent = mController.getNavigationIntent();
+        if (intent != null) {
+            startActivity(intent);
+        }
     }
 
     private void onShowPackage() {

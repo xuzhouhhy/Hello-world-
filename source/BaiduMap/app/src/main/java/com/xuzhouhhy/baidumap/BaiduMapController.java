@@ -1,11 +1,14 @@
 package com.xuzhouhhy.baidumap;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
@@ -105,7 +108,7 @@ class BaiduMapController {
      */
     public void deleteSelect() {
         if (mBlockNumber == null || mBlockNumber.isEmpty()) {
-            Toast.makeText(App.getInstance(), "请选择删除点", LENGTH_LONG);
+            Toast.makeText(App.getInstance(), "请选择点", LENGTH_LONG);
             return;
         }
         for (BaiduBlockMark blockMark : mBaiduBlockMarks) {
@@ -116,5 +119,36 @@ class BaiduMapController {
                 return;
             }
         }
+    }
+
+    public Intent getNavigationIntent() {
+        if (mBlockNumber == null || mBlockNumber.isEmpty()) {
+            Toast.makeText(App.getInstance(), "请选择点", LENGTH_LONG);
+            return null;
+        }
+        Overlay pointMark;
+        for (BaiduBlockMark blockMark : mBaiduBlockMarks) {
+            if (blockMark.getBlock().getBlockNumber().equalsIgnoreCase(mBlockNumber)) {
+                pointMark = blockMark.getPointMark();
+                if (pointMark == null) {
+                    Toast.makeText(App.getInstance(), "目标点无坐标", LENGTH_LONG);
+                    return null;
+                }
+                return getIntent((Marker) pointMark);
+            }
+        }
+        return null;
+    }
+
+    @NonNull
+    private Intent getIntent(Marker pointMark) {
+        LatLng latLng = pointMark.getPosition();
+        String lat = String.valueOf(latLng.latitude);
+        String lon = String.valueOf(latLng.longitude);
+        String uriDes = lat + "," + lon;
+        Intent intent = new Intent();
+        // 驾车路线规划
+        intent.setData(Uri.parse("baidumap://map/direction?region=beijing&origin=39.98871,116.43234&destination=" + uriDes + "&mode=driving"));
+        return intent;
     }
 }
