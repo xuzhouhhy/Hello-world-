@@ -9,7 +9,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private MapView mMapView;
 
     private Dialog mDialog;
+
+    private ViewHolder mViewHolder;
 
     private BaiduMap.OnMarkerClickListener mOnMarkerClickListener = new BaiduMap.OnMarkerClickListener() {
         @Override
@@ -107,12 +113,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-    private void dismissInputDialog() {
-        if (mDialog != null) {
-            mDialog.cancel();
-        }
-    }
+    private AdapterView.OnItemSelectedListener mSpinerItemClickLinster =
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    onSpinnerItemSelected(position);
+                }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +194,15 @@ public class MainActivity extends AppCompatActivity {
     private void onInput() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dialog_input_navigation_point, null);
+        mViewHolder = new ViewHolder();
+        mViewHolder.mSpinner = (Spinner) view.findViewById(R.id.spPointType);
+        mViewHolder.mTvLocalN = (TextView) view.findViewById(R.id.tvLocalN);
+        mViewHolder.mTvLocalE = (TextView) view.findViewById(R.id.tvLocalE);
+        mViewHolder.mTvLocalH = (TextView) view.findViewById(R.id.tvLocalH);
+        mViewHolder.mEdtLocalN = (EditText) view.findViewById(R.id.edtLocalN);
+        mViewHolder.mEdtLocalE = (EditText) view.findViewById(R.id.edtLocalE);
+        mViewHolder.mEdtLocalH = (EditText) view.findViewById(R.id.edtLocalH);
+        mViewHolder.mSpinner.setOnItemSelectedListener(mSpinerItemClickLinster);
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setView(view)
                 .setMessage("目的地坐标")
@@ -190,6 +211,29 @@ public class MainActivity extends AppCompatActivity {
                 .setCancelable(false);
         mDialog = builder.create();
         mDialog.show();
+    }
+
+    private void onSpinnerItemSelected(int position) {
+        switch (position) {
+            case 0:
+                mViewHolder.mTvLocalN.setText("本地北");
+                mViewHolder.mTvLocalE.setText("本地东");
+                mViewHolder.mTvLocalH.setText("本地高");
+                break;
+            case 1:
+                mViewHolder.mTvLocalN.setText("WGS84 纬度");
+                mViewHolder.mTvLocalE.setText("WGS84 经度");
+                mViewHolder.mTvLocalH.setText("WGS84 海拔");
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void dismissInputDialog() {
+        if (mDialog != null) {
+            mDialog.cancel();
+        }
     }
 
     @Override
@@ -208,5 +252,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+    }
+
+    private class ViewHolder {
+        TextView mTvLocalN;
+        TextView mTvLocalE;
+        TextView mTvLocalH;
+        Spinner mSpinner;
+        EditText mEdtLocalN;
+        EditText mEdtLocalE;
+        EditText mEdtLocalH;
     }
 }
