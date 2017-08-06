@@ -23,6 +23,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.Text;
 import com.baidu.mapapi.model.LatLng;
+import com.xuzhouhhy.baidumap.app.App;
 import com.xuzhouhhy.baidumap.data.Block;
 import com.xuzhouhhy.baidumap.data.Point3DMutable;
 import com.xuzhouhhy.baidumap.db.NavigatePointManage;
@@ -190,17 +191,27 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Block> getBlocks() {
         List<Block> blocks = new ArrayList<>();
-        blocks.add(new Block(new Point3DMutable(31, 121, 0), "S_0123456_01"));
-        blocks.add(new Block(new Point3DMutable(31.1, 121.1, 0), "S_0123456_02"));
-        blocks.add(new Block(new Point3DMutable(31.2, 121.2, 0), "S_0123456_03"));
-        blocks.add(new Block(new Point3DMutable(30.9, 120.9, 0), "S_0123456_04"));
-        blocks.add(new Block(new Point3DMutable(30.8, 120.8, 0), "S_0123456_05"));
-        blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "S_0123456_06"));
+        blocks.add(new Block(new Point3DMutable(31, 121, 0), "S_0123456_01", false));
+        blocks.add(new Block(new Point3DMutable(31.1, 121.1, 0), "S_0123456_02", false));
+        blocks.add(new Block(new Point3DMutable(31.2, 121.2, 0), "S_0123456_03", false));
+        blocks.add(new Block(new Point3DMutable(30.9, 120.9, 0), "S_0123456_04", false));
+        blocks.add(new Block(new Point3DMutable(30.8, 120.8, 0), "S_0123456_05", false));
+        blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "S_0123456_06", false));
+        blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "输入点1", true));
+        blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "输入点2", true));
+        blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "输入点3", true));
+        blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "输入点4", true));
+        blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "输入点5", true));
+        blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "输入点6", true));
         return blocks;
     }
 
     private void onDelete() {
-        mController.deleteSelect();
+        if (mController.deleteSelect()) {
+            Toast.makeText(App.getInstance(), "删除成功", LENGTH_LONG);
+        } else {
+            Toast.makeText(App.getInstance(), "删除失败", LENGTH_LONG);
+        }
     }
 
     private void onNavigate() {

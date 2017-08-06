@@ -83,7 +83,7 @@ public class NavigatePointManage {
             contentValues.put(WGSB.getValue(), point.getX());
             contentValues.put(WGSL.getValue(), point.getY());
             contentValues.put(WGSH.getValue(), point.getZ());
-            ret = db.update(TABLE_NAME.getValue(), contentValues, "name = ?", new String[]{name}) > -1;
+            ret = db.update(TABLE_NAME.getValue(), contentValues, "name = ?", new String[]{name}) > 0;
             db.setTransactionSuccessful();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,7 +109,7 @@ public class NavigatePointManage {
             contentValues.put(WGSB.getValue(), 0.0);
             contentValues.put(WGSL.getValue(), 0.0);
             contentValues.put(WGSH.getValue(), 0.0);
-            ret = db.update(TABLE_NAME.getValue(), contentValues, "name = ?", new String[]{name}) > -1;
+            ret = db.update(TABLE_NAME.getValue(), contentValues, "name = ?", new String[]{name}) > 0;
             db.setTransactionSuccessful();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -175,4 +175,15 @@ public class NavigatePointManage {
         return ret;
     }
 
+    /**
+     * 删除导航点
+     *
+     * @param name 点名
+     * @return 删除成功？
+     */
+    public static boolean delete(String name) {
+        BdcDatabaseHelper bdcDb = App.getInstance().getBdcDbHelper();
+        SQLiteDatabase db = bdcDb.getWritableDatabase();
+        return db.delete(TABLE_NAME.getValue(), "name = ?", new String[]{name}) > 0;
+    }
 }

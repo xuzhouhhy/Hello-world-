@@ -17,6 +17,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.xuzhouhhy.baidumap.app.App;
 import com.xuzhouhhy.baidumap.data.BaiduBlockMark;
 import com.xuzhouhhy.baidumap.data.Block;
+import com.xuzhouhhy.baidumap.db.NavigatePointManage;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
 
 import java.util.ArrayList;
@@ -106,19 +107,24 @@ class BaiduMapController {
     /**
      * delete select block mark
      */
-    public void deleteSelect() {
+    public boolean deleteSelect() {
+        boolean ret = false;
         if (mBlockNumber == null || mBlockNumber.isEmpty()) {
             Toast.makeText(App.getInstance(), "请选择点", LENGTH_LONG);
-            return;
+            return ret;
         }
         for (BaiduBlockMark blockMark : mBaiduBlockMarks) {
             if (blockMark.getBlock().getMarkTitle().equalsIgnoreCase(mBlockNumber)) {
                 blockMark.getPointMark().remove();
                 blockMark.getTitleMark().remove();
                 mBaiduBlockMarks.remove(blockMark);
-                return;
+                ret = true;
+                if (blockMark.getBlock().isInput()) {
+                    ret = NavigatePointManage.delete(blockMark.getBlock().getMarkTitle());
+                }
             }
         }
+        return ret;
     }
 
     public Intent getNavigationIntent() {

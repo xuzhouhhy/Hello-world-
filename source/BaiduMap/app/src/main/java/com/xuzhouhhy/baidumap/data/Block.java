@@ -16,9 +16,15 @@ public class Block {
      */
     private String mMarkTitle;
 
-    public Block(Point3DMutable point, String markTitle) {
+    /**
+     * 输入的导航点？
+     */
+    private boolean mIsInput;
+
+    public Block(Point3DMutable point, String markTitle, boolean isInput) {
         mPoint = point;
         mMarkTitle = markTitle;
+        mIsInput = isInput;
     }
 
     public Point3DMutable getPoint() {
@@ -27,5 +33,9 @@ public class Block {
 
     public String getMarkTitle() {
         return mMarkTitle;
+    }
+
+    public boolean isInput() {
+        return mIsInput;
     }
 }
