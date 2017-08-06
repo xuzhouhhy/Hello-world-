@@ -6,7 +6,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.xuzhouhhy.baidumap.app.App;
+import com.xuzhouhhy.baidumap.data.Block;
 import com.xuzhouhhy.baidumap.data.Point3DMutable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.xuzhouhhy.baidumap.db.NavigationTable.LOCALE;
 import static com.xuzhouhhy.baidumap.db.NavigationTable.LOCALH;
@@ -185,5 +189,27 @@ public class NavigatePointManage {
         BdcDatabaseHelper bdcDb = App.getInstance().getBdcDbHelper();
         SQLiteDatabase db = bdcDb.getWritableDatabase();
         return db.delete(TABLE_NAME.getValue(), "name = ?", new String[]{name}) > 0;
+    }
+
+    public static List<Block> queryAll() {
+//        BdcDatabaseHelper bdcDb = App.getInstance().getBdcDbHelper();
+//        SQLiteDatabase db = bdcDb.getReadableDatabase();
+//        String sql = "select * from navigate_point";
+//        Cursor cursor = db.query(TABLE_NAME.getValue(), new String[]{POINT_NAME.getValue(),
+//                LOCALN.getValue(),
+//                LOCALE.getValue(),
+//                LOCALH.getValue(),
+//                WGSB.getValue(),
+//                WGSL.getValue(),
+//                WGSH.getValue()}, null, null, null, null, null);
+//        if (cursor != null && cursor.getCount() > 0) {
+//            while (cursor.moveToNext()) {
+//                int c = cursor.getColumnCount();
+//                String name = cursor.getString(cursor.getColumnIndex(POINT_NAME.getValue()));
+//                String type =
+//                Block block = new Block(,true);
+//            }
+//        }
+        return new ArrayList<>();
     }
 }
