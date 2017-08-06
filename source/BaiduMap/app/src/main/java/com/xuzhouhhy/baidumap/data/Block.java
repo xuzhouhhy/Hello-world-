@@ -7,25 +7,25 @@ package com.xuzhouhhy.baidumap.data;
 public class Block {
 
     /**
-     * 地块中心点，有shape文件读取
+     * 地块中心点，shape文件读取 or 输入导航点
      */
     private Point3DMutable mPoint;
 
     /**
-     * 地块编号
+     * 地块编号 or 导航点名
      */
-    private String mBlockNumber;
+    private String mMarkTitle;
 
-    public Block(Point3DMutable point, String blockNumber) {
+    public Block(Point3DMutable point, String markTitle) {
         mPoint = point;
-        mBlockNumber = blockNumber;
+        mMarkTitle = markTitle;
     }
 
     public Point3DMutable getPoint() {
         return mPoint;
     }
 
-    public String getBlockNumber() {
-        return mBlockNumber;
+    public String getMarkTitle() {
+        return mMarkTitle;
     }
 }

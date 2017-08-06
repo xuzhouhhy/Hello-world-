@@ -1,8 +1,11 @@
 package com.xuzhouhhy.baidumap.app;
 
 import android.app.Application;
+import android.database.SQLException;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.xuzhouhhy.baidumap.Constant;
+import com.xuzhouhhy.baidumap.db.BdcDatabaseHelper;
 
 /**
  * application
@@ -13,6 +16,8 @@ public class App extends Application {
 
     private static App instance = null;
 
+    private BdcDatabaseHelper mBdcDbHelper;
+
     public static App getInstance() {
         return instance;
     }
@@ -22,7 +27,16 @@ public class App extends Application {
         super.onCreate();
         instance = this;
         SDKInitializer.initialize(this);
-
+        try {
+            mBdcDbHelper = new BdcDatabaseHelper(this,
+                    Constant.getAppDataPath() + "Bdc/bdc.db");
+            mBdcDbHelper.getWritableDatabase();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    public BdcDatabaseHelper getBdcDbHelper() {
+        return mBdcDbHelper;
+    }
 }

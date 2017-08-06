@@ -82,7 +82,7 @@ class BaiduMapController {
         Overlay marker = mBaiduMap.addOverlay(option);
         marker.setZIndex(i);
         Bundle bundle = new Bundle();
-        bundle.putString("mark_key", mBlocks.get(i).getBlockNumber());
+        bundle.putString("mark_key", mBlocks.get(i).getMarkTitle());
         marker.setExtraInfo(bundle);
         return marker;
     }
@@ -112,7 +112,7 @@ class BaiduMapController {
             return;
         }
         for (BaiduBlockMark blockMark : mBaiduBlockMarks) {
-            if (blockMark.getBlock().getBlockNumber().equalsIgnoreCase(mBlockNumber)) {
+            if (blockMark.getBlock().getMarkTitle().equalsIgnoreCase(mBlockNumber)) {
                 blockMark.getPointMark().remove();
                 blockMark.getTitleMark().remove();
                 mBaiduBlockMarks.remove(blockMark);
@@ -128,7 +128,7 @@ class BaiduMapController {
         }
         Overlay pointMark;
         for (BaiduBlockMark blockMark : mBaiduBlockMarks) {
-            if (blockMark.getBlock().getBlockNumber().equalsIgnoreCase(mBlockNumber)) {
+            if (blockMark.getBlock().getMarkTitle().equalsIgnoreCase(mBlockNumber)) {
                 pointMark = blockMark.getPointMark();
                 if (pointMark == null) {
                     Toast.makeText(App.getInstance(), "目标点无坐标", LENGTH_LONG);

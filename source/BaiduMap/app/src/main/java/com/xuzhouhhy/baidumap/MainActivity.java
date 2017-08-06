@@ -25,6 +25,7 @@ import com.baidu.mapapi.map.Text;
 import com.baidu.mapapi.model.LatLng;
 import com.xuzhouhhy.baidumap.data.Block;
 import com.xuzhouhhy.baidumap.data.Point3DMutable;
+import com.xuzhouhhy.baidumap.db.NavigatePointManage;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, clickBlockNum, LENGTH_LONG).show();
             marker.setIcon(getClickBitmapDescriptor());
             for (int i = 0; i < mController.getBaiduBlockMarks().size(); i++) {
-                String num = mController.getBaiduBlockMarks().get(i).getBlock().getBlockNumber();
+                String num = mController.getBaiduBlockMarks().get(i).getBlock().getMarkTitle();
                 if (clickBlockNum.equalsIgnoreCase(num)) {
                     ((Text) mController.getBaiduBlockMarks().get(i).getTitleMark()).setBgColor(
                             getResources().getColor(R.color.colorPrimaryDark));
@@ -100,7 +101,26 @@ public class MainActivity extends AppCompatActivity {
             new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(MainActivity.this, "点击确定", LENGTH_LONG).show();
+                    boolean isLocal = (mViewHolder.mSpinner.getSelectedItemId() == 0);
+                    double x;
+                    double y;
+                    double z;
+                    if (isLocal) {
+                        x = Double.parseDouble(mViewHolder.mEdtLocalN.getText().toString());
+                        y = Double.parseDouble(mViewHolder.mEdtLocalE.getText().toString());
+                        z = Double.parseDouble(mViewHolder.mEdtLocalH.getText().toString());
+                    } else {
+                        x = Math.toRadians(Double.parseDouble(mViewHolder.mEdtLocalN.getText().toString()));
+                        y = Math.toRadians(Double.parseDouble(mViewHolder.mEdtLocalE.getText().toString()));
+                        z = Math.toRadians(Double.parseDouble(mViewHolder.mEdtLocalH.getText().toString()));
+                    }
+                    String name = mViewHolder.mEdtName.getText().toString();
+                    Point3DMutable point = new Point3DMutable(x, y, z);
+                    if (NavigatePointManage.addPoint(isLocal, name, point)) {
+                        Toast.makeText(MainActivity.this, "导航点保存成功", LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "导航点保存失败", LENGTH_LONG).show();
+                    }
                 }
             };
 
@@ -154,6 +174,18 @@ public class MainActivity extends AppCompatActivity {
         mController.getBaiduMap().animateMapStatus(update);
         //隐藏缩放按钮
         mMapView.showZoomControls(false);
+//        //query nav point
+//        BdcDatabaseHelper bdcDb = App.getInstance().getBdcDbHelper();
+//        SQLiteDatabase db = bdcDb.getReadableDatabase();
+//        Cursor cursor = db.query(TABLE_NAME.getValue(), new String[]{POINT_NAME.getValue(), POINT_TYPE.getValue(), LOCALN.getValue()},
+//                "name = ?", new String[]{"test"}, null, null, null);
+//        if (cursor != null && cursor.getCount() > 0) {
+//            while (cursor.moveToNext()) {
+//                int size = cursor.getColumnCount();
+//            }
+//            cursor.close();
+//        }
+//        db.close();
     }
 
     private List<Block> getBlocks() {
@@ -194,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dialog_input_navigation_point, null);
         mViewHolder = new ViewHolder();
+        mViewHolder.mEdtName = (EditText) view.findViewById(R.id.edtPointName);
         mViewHolder.mSpinner = (Spinner) view.findViewById(R.id.spPointType);
         mViewHolder.mTvLocalN = (TextView) view.findViewById(R.id.tvLocalN);
         mViewHolder.mTvLocalE = (TextView) view.findViewById(R.id.tvLocalE);
@@ -254,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class ViewHolder {
+        EditText mEdtName;
         TextView mTvLocalN;
         TextView mTvLocalE;
         TextView mTvLocalH;
