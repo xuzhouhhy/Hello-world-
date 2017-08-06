@@ -1,6 +1,7 @@
 package com.xuzhouhhy.baidumap.db;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -26,12 +27,12 @@ public class NavigatePointManage {
     /**
      * 数据库本地导航点标记
      */
-    public static final String LOCAL_POINT_MARK = "local";
+    private static final String LOCAL_POINT_MARK = "local";
 
     /**
      * 数据库WGS导航点标记
      */
-    public static final String WGS_POINT_MARK = "wgs";
+    private static final String WGS_POINT_MARK = "wgs";
 
     /**
      * 添加导航点到数据库
@@ -42,11 +43,82 @@ public class NavigatePointManage {
      * @return 保存成功？
      */
     public static boolean addPoint(boolean isLocal, String name, Point3DMutable point) {
+        BdcDatabaseHelper bdcDb = App.getInstance().getBdcDbHelper();
+        SQLiteDatabase db = bdcDb.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME.getValue(), new String[]{POINT_NAME.getValue()},
+                "name = ?", new String[]{name}, null, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            boolean ret = updateVallue(isLocal, name, point);
+            cursor.close();
+            db.close();
+            bdcDb.close();
+            return ret;
+        }
         if (isLocal) {
             return addLocalPoint(name, point);
         } else {
             return addWgsPoint(name, point);
         }
+    }
+
+    private static boolean updateVallue(boolean isLocal, String name, Point3DMutable point) {
+        if (isLocal) {
+            return updateLocalPoint(name, point);
+        } else {
+            return updateWgsPoint(name, point);
+        }
+    }
+
+    private static boolean updateWgsPoint(String name, Point3DMutable point) {
+        boolean ret = false;
+        BdcDatabaseHelper bdcDb = App.getInstance().getBdcDbHelper();
+        SQLiteDatabase db = bdcDb.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(POINT_TYPE.getValue(), WGS_POINT_MARK);
+            contentValues.put(LOCALN.getValue(), 0.0);
+            contentValues.put(LOCALE.getValue(), 0.0);
+            contentValues.put(LOCALH.getValue(), 0.0);
+            contentValues.put(WGSB.getValue(), point.getX());
+            contentValues.put(WGSL.getValue(), point.getY());
+            contentValues.put(WGSH.getValue(), point.getZ());
+            ret = db.update(TABLE_NAME.getValue(), contentValues, "name = ?", new String[]{name}) > -1;
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+        return ret;
+    }
+
+    private static boolean updateLocalPoint(String name, Point3DMutable point) {
+        boolean ret = false;
+        BdcDatabaseHelper bdcDb = App.getInstance().getBdcDbHelper();
+        SQLiteDatabase db = bdcDb.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(POINT_TYPE.getValue(), LOCAL_POINT_MARK);
+            contentValues.put(LOCALN.getValue(), point.getX());
+            contentValues.put(LOCALE.getValue(), point.getY());
+            contentValues.put(LOCALH.getValue(), point.getZ());
+            contentValues.put(WGSB.getValue(), 0.0);
+            contentValues.put(WGSL.getValue(), 0.0);
+            contentValues.put(WGSH.getValue(), 0.0);
+            ret = db.update(TABLE_NAME.getValue(), contentValues, "name = ?", new String[]{name}) > -1;
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+        return ret;
     }
 
     private static boolean addWgsPoint(String name, Point3DMutable point) {
