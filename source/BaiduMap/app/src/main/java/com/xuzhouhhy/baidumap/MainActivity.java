@@ -197,13 +197,14 @@ public class MainActivity extends AppCompatActivity {
         blocks.add(new Block(new Point3DMutable(30.9, 120.9, 0), "S_0123456_04", false));
         blocks.add(new Block(new Point3DMutable(30.8, 120.8, 0), "S_0123456_05", false));
         blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "S_0123456_06", false));
-        List<Block> inputBlock = NavigatePointManage.queryAll();
-        blocks.add(new Block(new Point3DMutable(30.9, 120.9, 0), "输入点1", true));
-        blocks.add(new Block(new Point3DMutable(30.8, 120.8, 0), "输入点2", true));
-        blocks.add(new Block(new Point3DMutable(30.7, 120.7, 0), "输入点3", true));
+//        List<Block> inputBlock = NavigatePointManage.queryAll();
+        blocks.add(new Block(new Point3DMutable(31.3, 121.3, 0), "输入点1", true));
+        blocks.add(new Block(new Point3DMutable(31.4, 121.4, 0), "输入点2", true));
+        blocks.add(new Block(new Point3DMutable(31.5, 121.5, 0), "输入点3", true));
         blocks.add(new Block(new Point3DMutable(30.6, 120.6, 0), "输入点4", true));
         blocks.add(new Block(new Point3DMutable(30.5, 120.5, 0), "输入点5", true));
         blocks.add(new Block(new Point3DMutable(30.4, 120.4, 0), "输入点6", true));
+//        blocks.addAll(inputBlock);
         return blocks;
     }
 
