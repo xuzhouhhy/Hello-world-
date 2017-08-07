@@ -48,43 +48,40 @@ class BaiduMapController {
     }
 
     private void initPointMarker() {
-        for (int i = 0; i < mBlocks.size(); i++) {
-            Overlay pointMarker = getPointOverlay(i);
-            Overlay titleMarker = getTitleOverlay(i);
-            mBaiduBlockMarks.add(new BaiduBlockMark(mBlocks.get(i), pointMarker, titleMarker));
+        for (Block block : mBlocks) {
+            Overlay pointMarker = getPointOverlay(block);
+            Overlay titleMarker = getTitleOverlay(block);
+            mBaiduBlockMarks.add(new BaiduBlockMark(block, pointMarker, titleMarker));
         }
     }
 
-    private Overlay getTitleOverlay(int i) {
-        LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mBlocks.get(i).getPoint());
+    private Overlay getTitleOverlay(Block block) {
+        LatLng latLng = UtilBaidu.coorConverter84ToBaidu(block.getPoint());
         TextOptions textOptions = new TextOptions()
-                .text("index : " + new Integer(i).toString())
+                .text("index : " + block.getMarkTitle())
                 .align(TextOptions.ALIGN_CENTER_VERTICAL, TextOptions.ALIGN_TOP)
                 .fontSize(30)
                 .bgColor(android.support.v7.appcompat.R.color.abc_hint_foreground_material_dark)
                 .fontColor(android.support.v7.appcompat.R.color.abc_btn_colored_borderless_text_material)
                 .position(latLng)
-                .zIndex(i)
                 .rotate(0);
         return mBaiduMap.addOverlay(textOptions);
     }
 
     @NonNull
-    private Overlay getPointOverlay(int i) {
+    private Overlay getPointOverlay(Block block) {
         //定义Maker坐标点
-        LatLng latLng = UtilBaidu.coorConverter84ToBaidu(mBlocks.get(i).getPoint());
+        LatLng latLng = UtilBaidu.coorConverter84ToBaidu(block.getPoint());
         //构建Marker图标
         BitmapDescriptor bitmap = UtilBaidu.getBitmapDescriptor();
         //构建MarkerOption，用于在地图上添加Marker
         OverlayOptions option = new MarkerOptions()
                 .position(latLng)
-                .icon(bitmap)
-                .title("s_12345_01");
+                .icon(bitmap);
         //在地图上添加Marker，并显示
         Overlay marker = mBaiduMap.addOverlay(option);
-        marker.setZIndex(i);
         Bundle bundle = new Bundle();
-        bundle.putString("mark_key", mBlocks.get(i).getMarkTitle());
+        bundle.putString("mark_key", block.getMarkTitle());
         marker.setExtraInfo(bundle);
         return marker;
     }
@@ -160,5 +157,16 @@ class BaiduMapController {
         // 驾车路线规划
         intent.setData(Uri.parse("baidumap://map/direction?region=beijing&origin=39.98871,116.43234&destination=" + uriDes + "&mode=driving"));
         return intent;
+    }
+
+    /**
+     * 添加地块点，包括数据和地图显示
+     *
+     * @param block 地块
+     */
+    public void addBlock(Block block) {
+        Overlay pointMarker = getPointOverlay(block);
+        Overlay titleMarker = getTitleOverlay(block);
+        mBaiduBlockMarks.add(new BaiduBlockMark(block, pointMarker, titleMarker));
     }
 }

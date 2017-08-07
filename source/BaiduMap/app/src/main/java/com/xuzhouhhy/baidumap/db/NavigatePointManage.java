@@ -80,7 +80,7 @@ public class NavigatePointManage {
         db.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(POINT_TYPE.getValue(), WGS_POINT_MARK);
+//            contentValues.put(POINT_TYPE.getValue(), WGS_POINT_MARK);
             contentValues.put(LOCALN.getValue(), 0.0);
             contentValues.put(LOCALE.getValue(), 0.0);
             contentValues.put(LOCALH.getValue(), 0.0);
@@ -106,7 +106,7 @@ public class NavigatePointManage {
         db.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(POINT_TYPE.getValue(), LOCAL_POINT_MARK);
+//            contentValues.put(POINT_TYPE.getValue(), LOCAL_POINT_MARK);
             contentValues.put(LOCALN.getValue(), point.getX());
             contentValues.put(LOCALE.getValue(), point.getY());
             contentValues.put(LOCALH.getValue(), point.getZ());
@@ -133,7 +133,7 @@ public class NavigatePointManage {
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put(POINT_NAME.getValue(), name);
-            contentValues.put(POINT_TYPE.getValue(), WGS_POINT_MARK);
+//            contentValues.put(POINT_TYPE.getValue(), WGS_POINT_MARK);
             contentValues.put(LOCALN.getValue(), 0.0);
             contentValues.put(LOCALE.getValue(), 0.0);
             contentValues.put(LOCALH.getValue(), 0.0);
@@ -160,7 +160,7 @@ public class NavigatePointManage {
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put(POINT_NAME.getValue(), name);
-            contentValues.put(POINT_TYPE.getValue(), LOCAL_POINT_MARK);
+//            contentValues.put(POINT_TYPE.getValue(), LOCAL_POINT_MARK);
             contentValues.put(LOCALN.getValue(), point.getX());
             contentValues.put(LOCALE.getValue(), point.getY());
             contentValues.put(LOCALH.getValue(), point.getZ());
@@ -192,9 +192,11 @@ public class NavigatePointManage {
     }
 
     public static List<Block> queryAll() {
+        List<Block> inputBlock = new ArrayList<>();
         BdcDatabaseHelper bdcDb = App.getInstance().getBdcDbHelper();
         SQLiteDatabase db = bdcDb.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME.getValue(), new String[]{POINT_NAME.getValue(),
+                POINT_TYPE.getValue(),
                 LOCALN.getValue(),
                 LOCALE.getValue(),
                 LOCALH.getValue(),
@@ -203,27 +205,19 @@ public class NavigatePointManage {
                 WGSH.getValue()}, null, null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-                int c = cursor.getColumnCount();
                 String name = cursor.getString(cursor.getColumnIndex(POINT_NAME.getValue()));
-                String type = cursor.getString(cursor.getColumnIndex(POINT_TYPE.getValue()));
                 double localN = cursor.getDouble(cursor.getColumnIndex(LOCALN.getValue()));
                 double localE = cursor.getDouble(cursor.getColumnIndex(LOCALE.getValue()));
                 double localH = cursor.getDouble(cursor.getColumnIndex(LOCALH.getValue()));
                 double wgsB = cursor.getDouble(cursor.getColumnIndex(WGSB.getValue()));
                 double wgsL = cursor.getDouble(cursor.getColumnIndex(WGSL.getValue()));
                 double wgsH = cursor.getDouble(cursor.getColumnIndex(WGSH.getValue()));
-                if (type != null) {
-                    if (type.trim().equalsIgnoreCase(LOCAL_POINT_MARK)) {
-                        Point3DMutable point = new Point3DMutable(localN, localE, localH);
-                        Block block = new Block(point, name, true);
-                    } else if (type.trim().equalsIgnoreCase(WGS_POINT_MARK)) {
-                        Point3DMutable point = new Point3DMutable(wgsB, wgsL, wgsH);
-                        Block block = new Block(point, name, true);
-                    }
-                }
+                Point3DMutable point = new Point3DMutable(wgsB, wgsL, wgsH);
+                Block block = new Block(point, name, true);
+                inputBlock.add(block);
             }
             cursor.close();
         }
-        return new ArrayList<>();
+        return inputBlock;
     }
 }

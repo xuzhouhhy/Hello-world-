@@ -111,14 +111,18 @@ public class MainActivity extends AppCompatActivity {
                         y = Double.parseDouble(mViewHolder.mEdtLocalE.getText().toString());
                         z = Double.parseDouble(mViewHolder.mEdtLocalH.getText().toString());
                     } else {
-                        x = Math.toRadians(Double.parseDouble(mViewHolder.mEdtLocalN.getText().toString()));
-                        y = Math.toRadians(Double.parseDouble(mViewHolder.mEdtLocalE.getText().toString()));
-                        z = Math.toRadians(Double.parseDouble(mViewHolder.mEdtLocalH.getText().toString()));
+//                        x = Math.toRadians(Double.parseDouble(mViewHolder.mEdtLocalN.getText().toString()));
+//                        y = Math.toRadians(Double.parseDouble(mViewHolder.mEdtLocalE.getText().toString()));
+//                        z = Math.toRadians(Double.parseDouble(mViewHolder.mEdtLocalH.getText().toString()));
+                        x = Double.parseDouble(mViewHolder.mEdtLocalN.getText().toString());
+                        y = Double.parseDouble(mViewHolder.mEdtLocalE.getText().toString());
+                        z = Double.parseDouble(mViewHolder.mEdtLocalH.getText().toString());
                     }
                     String name = mViewHolder.mEdtName.getText().toString();
                     Point3DMutable point = new Point3DMutable(x, y, z);
                     if (NavigatePointManage.addPoint(isLocal, name, point)) {
                         Toast.makeText(MainActivity.this, "导航点保存成功", LENGTH_LONG).show();
+                        mController.addBlock(new Block(point, name, true));
                     } else {
                         Toast.makeText(MainActivity.this, "导航点保存失败", LENGTH_LONG).show();
                     }
@@ -175,18 +179,6 @@ public class MainActivity extends AppCompatActivity {
         mController.getBaiduMap().animateMapStatus(update);
         //隐藏缩放按钮
         mMapView.showZoomControls(false);
-//        //query nav point
-//        BdcDatabaseHelper bdcDb = App.getInstance().getBdcDbHelper();
-//        SQLiteDatabase db = bdcDb.getReadableDatabase();
-//        Cursor cursor = db.query(TABLE_NAME.getValue(), new String[]{POINT_NAME.getValue(), POINT_TYPE.getValue(), LOCALN.getValue()},
-//                "name = ?", new String[]{"test"}, null, null, null);
-//        if (cursor != null && cursor.getCount() > 0) {
-//            while (cursor.moveToNext()) {
-//                int size = cursor.getColumnCount();
-//            }
-//            cursor.close();
-//        }
-//        db.close();
     }
 
     private List<Block> getBlocks() {
@@ -197,14 +189,16 @@ public class MainActivity extends AppCompatActivity {
         blocks.add(new Block(new Point3DMutable(30.9, 120.9, 0), "S_0123456_04", false));
         blocks.add(new Block(new Point3DMutable(30.8, 120.8, 0), "S_0123456_05", false));
         blocks.add(new Block(new Point3DMutable(33, 120.8, 0), "S_0123456_06", false));
-//        List<Block> inputBlock = NavigatePointManage.queryAll();
-        blocks.add(new Block(new Point3DMutable(31.3, 121.3, 0), "输入点1", true));
-        blocks.add(new Block(new Point3DMutable(31.4, 121.4, 0), "输入点2", true));
-        blocks.add(new Block(new Point3DMutable(31.5, 121.5, 0), "输入点3", true));
-        blocks.add(new Block(new Point3DMutable(30.6, 120.6, 0), "输入点4", true));
-        blocks.add(new Block(new Point3DMutable(30.5, 120.5, 0), "输入点5", true));
-        blocks.add(new Block(new Point3DMutable(30.4, 120.4, 0), "输入点6", true));
-//        blocks.addAll(inputBlock);
+        List<Block> inputBlock = NavigatePointManage.queryAll();
+//        blocks.add(new Block(new Point3DMutable(31.3, 121.3, 0), "输入点1", true));
+//        blocks.add(new Block(new Point3DMutable(31.4, 121.4, 0), "输入点2", true));
+//        blocks.add(new Block(new Point3DMutable(31.5, 121.5, 0), "输入点3", true));
+//        blocks.add(new Block(new Point3DMutable(30.6, 120.6, 0), "输入点4", true));
+//        blocks.add(new Block(new Point3DMutable(30.5, 120.5, 0), "输入点5", true));
+//        blocks.add(new Block(new Point3DMutable(30.4, 120.4, 0), "输入点6", true));
+        if (inputBlock != null) {
+            blocks.addAll(inputBlock);
+        }
         return blocks;
     }
 

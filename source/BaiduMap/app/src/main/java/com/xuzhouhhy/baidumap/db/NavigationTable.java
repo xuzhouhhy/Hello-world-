@@ -8,7 +8,7 @@ public enum NavigationTable {
 
     TABLE_NAME("navigate_point"),
     POINT_NAME("name"),
-    POINT_TYPE("point_type"),
+    POINT_TYPE("type"),
     LOCALN("localn"),
     LOCALE("locale"),
     LOCALH("localh"),
