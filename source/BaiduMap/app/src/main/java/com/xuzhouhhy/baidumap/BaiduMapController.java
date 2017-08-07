@@ -21,6 +21,7 @@ import com.xuzhouhhy.baidumap.db.NavigatePointManage;
 import com.xuzhouhhy.baidumap.util.UtilBaidu;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -111,16 +112,19 @@ class BaiduMapController {
         boolean ret = false;
         if (mBlockNumber == null || mBlockNumber.isEmpty()) {
             Toast.makeText(App.getInstance(), "请选择点", LENGTH_LONG);
-            return ret;
+            return false;
         }
-        for (BaiduBlockMark blockMark : mBaiduBlockMarks) {
+        Iterator<BaiduBlockMark> iterator = mBaiduBlockMarks.iterator();
+        while (iterator.hasNext()) {
+            BaiduBlockMark blockMark = iterator.next();
             if (blockMark.getBlock().getMarkTitle().equalsIgnoreCase(mBlockNumber)) {
                 blockMark.getPointMark().remove();
                 blockMark.getTitleMark().remove();
-                mBaiduBlockMarks.remove(blockMark);
-                ret = true;
+                iterator.remove();
                 if (blockMark.getBlock().isInput()) {
                     ret = NavigatePointManage.delete(blockMark.getBlock().getMarkTitle());
+                } else {
+                    ret = true;
                 }
             }
         }
